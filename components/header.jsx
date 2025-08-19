@@ -20,7 +20,7 @@ const Header = () => {
             alt="CallDoc Logo"
             width={200}
             height={60}
-            className="h-10 w-auto object-contain"
+            className="h-10 w-auto object-contain text-emerald-900"
           />
         </Link>
 

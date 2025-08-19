@@ -2,7 +2,6 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
   Card,
-  CardAction,
   CardContent,
   CardHeader,
   CardTitle,
@@ -208,7 +207,7 @@ export default function Home() {
             <CardContent className="p-8 md:p-12 lg:p-16 relative overflow-hidden">
               <div>
                 <h2 className="text-3xl md:text-4xl font-bold text-white mb-6">
-                  Take charge of your heath care with ease
+                  Take charge of your health care with ease
                 </h2>
                 <p className="text-lg text-muted-foreground mb-8">
                   Thousands already trust CallDoc to manage their
