@@ -59,6 +59,7 @@ export default function Home() {
                 src={"/banner2_calldoc.png"}
                 alt="Doctor consultation"
                 fill
+                sizes="lg"
                 priority
                 className="object-cover md:pt-14 rounded-xl"
               />
