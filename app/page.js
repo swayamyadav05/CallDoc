@@ -1,3 +1,4 @@
+import Pricing from "@/components/pricing";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -59,7 +60,6 @@ export default function Home() {
                 src={"/banner2_calldoc.png"}
                 alt="Doctor consultation"
                 fill
-                sizes="lg"
                 priority
                 className="object-cover md:pt-14 rounded-xl"
               />
@@ -122,35 +122,33 @@ export default function Home() {
             </p>
           </div>
 
-          <div>{/* Pricing Table */}</div>
-
-          <Card className="mt-12 bg-muted/20 border-emerald-900/30">
-            <CardHeader>
-              <CardTitle className="text-xl font-semibold text-white flex items-center">
-                <Stethoscope className="h-5 w-5 mr-2 text-emerald-400" />
-                How Our Credit System Works
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <ul className="space-y-3">
-                {creditBenefits.map((benefit, index) => {
-                  return (
-                    <li key={index} className="flex items-start">
-                      <div className="mr-3 mt-1 bg-emerald-900/20 p-1 rounded-full">
-                        <Check className="h-4 w-4 text-emerald-400" />
-                      </div>
-                      <p
-                        className="text-muted-foreground"
-                        dangerouslySetInnerHTML={{
-                          __html: benefit,
-                        }}
-                      />
-                    </li>
-                  );
-                })}
-              </ul>{" "}
-            </CardContent>
-          </Card>
+          <div>
+            <Pricing />
+            <Card className="mt-12 bg-muted/20 border-emerald-900/30">
+              <CardHeader>
+                <CardTitle className="text-xl font-semibold text-white flex items-center">
+                  <Stethoscope className="h-5 w-5 mr-2 text-emerald-400" />
+                  How Our Credit System Works
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <ul className="space-y-3">
+                  {creditBenefits.map((benefit, index) => {
+                    return (
+                      <li key={index} className="flex items-start">
+                        <div className="mr-3 mt-1 bg-emerald-900/20 p-1 rounded-full">
+                          <Check className="h-4 w-4 text-emerald-400" />
+                        </div>
+                        <p className="text-muted-foreground">
+                          {benefit}
+                        </p>
+                      </li>
+                    );
+                  })}
+                </ul>{" "}
+              </CardContent>
+            </Card>
+          </div>
         </div>
       </section>
 

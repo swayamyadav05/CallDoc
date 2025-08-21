@@ -11,13 +11,20 @@ import { Button } from "./ui/button";
 import { checkUser } from "@/lib/checkUser";
 import {
   CalendarClock,
+  CreditCard,
   ShieldUser,
   Stethoscope,
   User,
 } from "lucide-react";
+import { checkAndAllocateCredits } from "@/actions/credits";
+import { Badge } from "./ui/badge";
 
 const Header = async () => {
-  const user = await checkUser();
+  let user = await checkUser();
+  if (user?.role === "PATIENT") {
+    user = (await checkAndAllocateCredits(user)) ?? user;
+  }
+
   return (
     <header className="fixed top-0 w-full border-b bg-background/80 backdrop-blur-md z-10 supports-[backdrop-filter]:bg-background/60">
       <nav className="container mx-auto px-4  h-16 flex items-center justify-between">
@@ -110,6 +117,30 @@ const Header = async () => {
               </Link>
             )}
           </SignedIn>
+
+          {(!user || user?.role === "PATIENT") && (
+            <Link href={"/pricing"}>
+              <Badge
+                variant={"outline"}
+                className={
+                  "h-9 bg-emerald-900/20 border-emerald-700/30 px-3 py-1 flex items-center gap-2"
+                }>
+                <CreditCard className="h-3.5 w-3.5 text-emerald-400" />
+                <span className="text-emerald-400">
+                  {user && user?.role === "PATIENT" ? (
+                    <>
+                      {user.credits}{" "}
+                      <span className="hidden md:inline">
+                        Credits
+                      </span>
+                    </>
+                  ) : (
+                    <>Pricing</>
+                  )}
+                </span>
+              </Badge>
+            </Link>
+          )}
 
           <SignedOut>
             <SignInButton>
