@@ -139,12 +139,9 @@ export default function Home() {
                         <div className="mr-3 mt-1 bg-emerald-900/20 p-1 rounded-full">
                           <Check className="h-4 w-4 text-emerald-400" />
                         </div>
-                        <p
-                          className="text-muted-foreground"
-                          dangerouslySetInnerHTML={{
-                            __html: benefit,
-                          }}
-                        />
+                        <p className="text-muted-foreground">
+                          {benefit}
+                        </p>
                       </li>
                     );
                   })}

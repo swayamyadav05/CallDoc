@@ -20,9 +20,9 @@ import { checkAndAllocateCredits } from "@/actions/credits";
 import { Badge } from "./ui/badge";
 
 const Header = async () => {
-  const user = await checkUser();
+  let user = await checkUser();
   if (user?.role === "PATIENT") {
-    await checkAndAllocateCredits(user);
+    user = (await checkAndAllocateCredits(user)) ?? user;
   }
 
   return (

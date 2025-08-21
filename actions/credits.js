@@ -2,7 +2,7 @@
 
 import prisma from "@/lib/prisma";
 import { auth } from "@clerk/nextjs/server";
-import { format } from "date-fns";
+import { format, startOfMonth } from "date-fns";
 import { revalidatePath } from "next/cache";
 
 const PLAN_CREDITS = {
@@ -39,7 +39,7 @@ export async function checkAndAllocateCredits(user) {
       currentPlan = "standard";
       creditsToAllocate = PLAN_CREDITS.standard;
     } else if (hasBasic) {
-      currentPlan = "free-user";
+      currentPlan = "free_user";
       creditsToAllocate = PLAN_CREDITS.free_user;
     }
 
@@ -66,6 +66,19 @@ export async function checkAndAllocateCredits(user) {
     }
 
     const updatedUser = await prisma.$transaction(async (tx) => {
+      // Double-check inside the transaction to reduce race risk
+      const existing = await tx.creditTransaction.findFirst({
+        where: {
+          userId: user.id,
+          type: "CREDIT_PURCHASE",
+          packageId: currentPlan,
+          createdAt: { gte: startOfMonth(new Date()) },
+        },
+        orderBy: { createdAt: "desc" },
+      });
+      if (existing) {
+        return tx.user.findUnique({ where: { id: user.id } });
+      }
       await tx.creditTransaction.create({
         data: {
           userId: user.id,
