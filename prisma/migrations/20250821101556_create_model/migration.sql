@@ -24,7 +24,7 @@ CREATE TABLE "public"."User" (
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
     "credits" INTEGER NOT NULL DEFAULT 2,
-    "speciality" TEXT,
+    "specialty" TEXT,
     "experience" INTEGER,
     "credentialUrl" TEXT,
     "description" TEXT,

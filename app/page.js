@@ -59,6 +59,7 @@ export default function Home() {
               <Image
                 src={"/banner2_calldoc.png"}
                 alt="Doctor consultation"
+                size="(max-width: 1024px) 100vw, 50vw"
                 fill
                 priority
                 className="object-cover md:pt-14 rounded-xl"
