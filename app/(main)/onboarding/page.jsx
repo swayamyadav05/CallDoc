@@ -24,7 +24,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { SPECIALTIES } from "@/lib/specialties";
+import { SPECIALITIES } from "@/lib/specialities";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 
@@ -198,7 +198,7 @@ const OnboardingPage = () => {
                   <SelectValue placeholder="Select your speciality" />
                 </SelectTrigger>
                 <SelectContent>
-                  {SPECIALTIES.map((spec) => {
+                  {SPECIALITIES.map((spec) => {
                     return (
                       <SelectItem key={spec.name} value={spec.name}>
                         <div className="flex items-center gap-2">
