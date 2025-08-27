@@ -15,7 +15,7 @@ const OnboardingLayout = async ({ children }) => {
     } else if (user.role === "DOCTOR") {
       if (user.verificationStatus === "VERIFIED") {
         redirect("/doctor");
-      } else {
+      } else if (user.verificationStatus === "PENDING") {
         redirect("/doctor/verification");
       }
     } else if (user.role === "ADMIN") {
