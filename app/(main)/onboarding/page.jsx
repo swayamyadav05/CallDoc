@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import z from "zod";
+import { z } from "zod";
 import {
   Card,
   CardContent,
@@ -152,8 +152,8 @@ const OnboardingPage = () => {
               Join as a Doctor
             </CardTitle>
             <CardDescription className={"mb-4"}>
-              Create your proffessional profile, set yout
-              availability, and provide consultations
+              Create your professional profile, set your availability,
+              and provide consultations
             </CardDescription>
             <Button
               disabled={loading}
@@ -251,7 +251,7 @@ const OnboardingPage = () => {
               )}
               <p className="text-sm text-muted-foreground">
                 Please provide a link to your medical degree or
-                cetification
+                certification
               </p>
             </div>
 

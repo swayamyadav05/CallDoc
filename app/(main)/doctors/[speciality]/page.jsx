@@ -3,10 +3,10 @@
 import { useParams } from "next/navigation";
 import React from "react";
 
-const specialityPage = () => {
+const SpecialityPage = () => {
   const { speciality } = useParams();
 
-  return <div>specialityPage: {speciality}</div>;
+  return <div>SpecialityPage: {speciality}</div>;
 };
 
-export default specialityPage;
+export default SpecialityPage;

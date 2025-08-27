@@ -42,18 +42,37 @@ export async function setUserRole(formData) {
     }
 
     if (role === "DOCTOR") {
-      const speciality = formData.get("speciality");
-      const experience = parseInt(formData.get("experience"), 10);
-      const credentialUrl = formData.get("credentialUrl");
-      const description = formData.get("description");
+      const speciality = String(
+        formData.get("speciality") || ""
+      ).trim();
+      const experienceRaw = formData.get("experience");
+      const experience = Number.parseInt(String(experienceRaw), 10);
+      const credentialUrl = String(
+        formData.get("credentialUrl") || ""
+      ).trim();
+      const description = String(
+        formData.get("description") || ""
+      ).trim();
 
-      if (
-        !speciality ||
-        !experience ||
-        !credentialUrl ||
-        !description
-      ) {
+      if (!speciality || !credentialUrl || !description) {
         throw new Error("All fields are required");
+      }
+      if (
+        !Number.isInteger(experience) ||
+        experience < 1 ||
+        experience > 80
+      ) {
+        throw new Error(
+          "Experience must be and integer between 1 and 80."
+        );
+      }
+      try {
+        const url = new URL(credentialUrl);
+        if (!["https:", "http:"].includes(url.protocol)) {
+          throw new Error("Invalid credential URL protocol.");
+        }
+      } catch {
+        throw new Error("Invalid credential URL.");
       }
 
       await prisma.user.update({
