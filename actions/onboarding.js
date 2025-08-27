@@ -42,8 +42,8 @@ export async function setUserRole(formData) {
     }
 
     if (role === "DOCTOR") {
-      const speciality = String(
-        formData.get("speciality") || ""
+      const specialty = String(
+        formData.get("specialty") || ""
       ).trim();
       const experienceRaw = formData.get("experience");
       const experience = Number.parseInt(String(experienceRaw), 10);
@@ -54,7 +54,7 @@ export async function setUserRole(formData) {
         formData.get("description") || ""
       ).trim();
 
-      if (!speciality || !credentialUrl || !description) {
+      if (!specialty || !credentialUrl || !description) {
         throw new Error("All fields are required");
       }
       if (
@@ -81,7 +81,7 @@ export async function setUserRole(formData) {
         },
         data: {
           role: "DOCTOR",
-          speciality,
+          specialty,
           experience,
           credentialUrl,
           description,
