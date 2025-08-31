@@ -30,8 +30,10 @@ import {
   User2,
   X,
 } from "lucide-react";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { BarLoader } from "react-spinners";
+import { toast } from "sonner";
 
 const PendingDoctors = ({ doctors }) => {
   const [selectedDoctors, setSelectedDoctors] = useState(null);
@@ -41,6 +43,7 @@ const PendingDoctors = ({ doctors }) => {
     data,
     fn: submitStatusUpdate,
   } = useFetch(updateDoctorStatus);
+  const router = useRouter();
 
   const handleUpdateStatus = async (doctorId, status) => {
     if (loading) return;
@@ -53,10 +56,12 @@ const PendingDoctors = ({ doctors }) => {
   };
 
   useEffect(() => {
-    if (data && data?.success) {
+    if (data?.success) {
+      toast.success("Status updated.");
       handleCloseDialog();
+      router.refresh();
     }
-  }, [data]);
+  }, [data, router]);
 
   const handleViewDetails = (doctor) => {
     setSelectedDoctors(doctor);
@@ -75,62 +80,62 @@ const PendingDoctors = ({ doctors }) => {
           <CardDescription>
             Review and approve doctor applications
           </CardDescription>
-          <CardContent>
-            {doctors.length === 0 ? (
-              <div className="text-center py-8 text-muted-foreground">
-                No pending verification requests at this time.
-              </div>
-            ) : (
-              <div className="space-y-4">
-                {doctors.map((doctor) => (
-                  <Card
-                    key={doctor.id}
-                    className={
-                      "bg-background border-emerald-900/20 hover:border-emerald-700/30 transition-all"
-                    }>
-                    <CardContent className={"p-4"}>
-                      <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-                        <div className="flex items-center gap-3">
-                          <div className="bg-muted/20 rounded-full p-2">
-                            <User2 className="h-5 w-5 text-emerald-400" />
-                          </div>
-                          <div>
-                            <h3 className="font-medium text-white">
-                              {doctor.name}
-                            </h3>
-                            <p className="text-sm text-muted-foreground">
-                              {doctor.specialty} • {doctor.experience}{" "}
-                              years of experience
-                            </p>
-                          </div>
+        </CardHeader>
+        <CardContent>
+          {doctors.length === 0 ? (
+            <div className="text-center py-8 text-muted-foreground">
+              No pending verification requests at this time.
+            </div>
+          ) : (
+            <div className="space-y-4">
+              {doctors.map((doctor) => (
+                <Card
+                  key={doctor.id}
+                  className={
+                    "bg-background border-emerald-900/20 hover:border-emerald-700/30 transition-all"
+                  }>
+                  <CardContent className={"p-4"}>
+                    <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+                      <div className="flex items-center gap-3">
+                        <div className="bg-muted/20 rounded-full p-2">
+                          <User2 className="h-5 w-5 text-emerald-400" />
                         </div>
-
-                        <div className="flex items-center gap-2 self-end md:self-auto">
-                          <Badge
-                            variant={"outline"}
-                            className={
-                              "bg-amber-900/20 border-amber-900/30 text-amber-400"
-                            }>
-                            Pending
-                          </Badge>
-                          <Button
-                            variant={"outline"}
-                            size={"sm"}
-                            onClick={() => handleViewDetails(doctor)}
-                            className={
-                              "border-emerald-900/30 hover:bg-muted/80"
-                            }>
-                            View Details
-                          </Button>
+                        <div>
+                          <h3 className="font-medium text-white">
+                            {doctor.name}
+                          </h3>
+                          <p className="text-sm text-muted-foreground">
+                            {doctor.specialty} • {doctor.experience}{" "}
+                            years of experience
+                          </p>
                         </div>
                       </div>
-                    </CardContent>
-                  </Card>
-                ))}
-              </div>
-            )}
-          </CardContent>
-        </CardHeader>
+
+                      <div className="flex items-center gap-2 self-end md:self-auto">
+                        <Badge
+                          variant={"outline"}
+                          className={
+                            "bg-amber-900/20 border-amber-900/30 text-amber-400"
+                          }>
+                          Pending
+                        </Badge>
+                        <Button
+                          variant={"outline"}
+                          size={"sm"}
+                          onClick={() => handleViewDetails(doctor)}
+                          className={
+                            "border-emerald-900/30 hover:bg-muted/80"
+                          }>
+                          View Details
+                        </Button>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          )}
+        </CardContent>
       </Card>
 
       {selectedDoctors && (

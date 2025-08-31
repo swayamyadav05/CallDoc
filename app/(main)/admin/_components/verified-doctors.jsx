@@ -13,6 +13,7 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Ban, Loader2, Search, User2 } from "lucide-react";
+import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { toast } from "sonner";
 
@@ -32,8 +33,10 @@ const VerifiedDoctors = ({ doctors }) => {
   const {
     loading,
     data,
+    error,
     fn: submitStatusUpdate,
   } = useFetch(updateDoctorActiveStatus);
+  const router = useRouter();
 
   const handleStatusChange = async (doctor) => {
     const confirmed = window.confirm(
@@ -54,8 +57,12 @@ const VerifiedDoctors = ({ doctors }) => {
     if (data?.success && targetDoctor) {
       toast.success(`Suspended ${targetDoctor.name} successfully!`);
       setTargetDoctor(null);
+      router.refresh();
     }
-  }, [data]);
+    if (error && targetDoctor) {
+      setTargetDoctor(null);
+    }
+  }, [data, error, targetDoctor, router]);
 
   return (
     <div>
@@ -80,70 +87,70 @@ const VerifiedDoctors = ({ doctors }) => {
               />
             </div>
           </div>
-          <CardContent>
-            {filteredDoctors.length === 0 ? (
-              <div className="text-center py-8 text-muted-foreground">
-                {searchTerm
-                  ? "No doctors match your search criteria."
-                  : "No verified doctors available."}
-              </div>
-            ) : (
-              <div className="space-y-4">
-                {filteredDoctors.map((doctor) => (
-                  <Card
-                    key={doctor.id}
-                    className={
-                      "bg-background border-emerald-900/20 hover:border-emerald-700/30 transition-all"
-                    }>
-                    <CardContent className={"p-4"}>
-                      <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-                        <div className="flex items-center gap-3">
-                          <div className="bg-muted/20 rounded-full p-2">
-                            <User2 className="h-5 w-5 text-emerald-400" />
-                          </div>
-                          <div>
-                            <h3 className="font-medium text-white">
-                              {doctor.name}
-                            </h3>
-                            <p className="text-sm text-muted-foreground">
-                              {doctor.specialty} • {doctor.experience}{" "}
-                              years of experience
-                            </p>
-                          </div>
+        </CardHeader>
+        <CardContent>
+          {filteredDoctors.length === 0 ? (
+            <div className="text-center py-8 text-muted-foreground">
+              {searchTerm
+                ? "No doctors match your search criteria."
+                : "No verified doctors available."}
+            </div>
+          ) : (
+            <div className="space-y-4">
+              {filteredDoctors.map((doctor) => (
+                <Card
+                  key={doctor.id}
+                  className={
+                    "bg-background border-emerald-900/20 hover:border-emerald-700/30 transition-all"
+                  }>
+                  <CardContent className={"p-4"}>
+                    <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+                      <div className="flex items-center gap-3">
+                        <div className="bg-muted/20 rounded-full p-2">
+                          <User2 className="h-5 w-5 text-emerald-400" />
                         </div>
-
-                        <div className="flex items-center gap-2 self-end md:self-auto">
-                          <Badge
-                            variant={"outline"}
-                            className={
-                              "bg-emerald-900/20 border-emerald-900/30 text-emerald-400"
-                            }>
-                            Active
-                          </Badge>
-                          <Button
-                            variant={"outline"}
-                            size={"sm"}
-                            onClick={() => handleStatusChange(doctor)}
-                            className={
-                              "border-red-900/30 hover:bg-red-900/10 text-red-400"
-                            }>
-                            {loading &&
-                            targetDoctor?.id === doctor.id ? (
-                              <Loader2 className="h-4 w-4 mr-1 animate-spin" />
-                            ) : (
-                              <Ban className="h-4 w-4 mr-1" />
-                            )}
-                            Suspend
-                          </Button>
+                        <div>
+                          <h3 className="font-medium text-white">
+                            {doctor.name}
+                          </h3>
+                          <p className="text-sm text-muted-foreground">
+                            {doctor.specialty} • {doctor.experience}{" "}
+                            years of experience
+                          </p>
                         </div>
                       </div>
-                    </CardContent>
-                  </Card>
-                ))}
-              </div>
-            )}
-          </CardContent>
-        </CardHeader>
+
+                      <div className="flex items-center gap-2 self-end md:self-auto">
+                        <Badge
+                          variant={"outline"}
+                          className={
+                            "bg-emerald-900/20 border-emerald-900/30 text-emerald-400"
+                          }>
+                          Active
+                        </Badge>
+                        <Button
+                          variant={"outline"}
+                          size={"sm"}
+                          onClick={() => handleStatusChange(doctor)}
+                          className={
+                            "border-red-900/30 hover:bg-red-900/10 text-red-400"
+                          }>
+                          {loading &&
+                          targetDoctor?.id === doctor.id ? (
+                            <Loader2 className="h-4 w-4 mr-1 animate-spin" />
+                          ) : (
+                            <Ban className="h-4 w-4 mr-1" />
+                          )}
+                          Suspend
+                        </Button>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          )}
+        </CardContent>
       </Card>
     </div>
   );

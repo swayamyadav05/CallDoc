@@ -79,14 +79,19 @@ export async function updateDoctorStatus(formData) {
   }
 
   try {
-    await prisma.user.update({
+    const { count } = await prisma.user.updateMany({
       where: {
         id: doctorId,
+        role: "DOCTOR",
       },
       data: {
         verificationStatus: status,
       },
     });
+
+    if (count === 0) {
+      throw new Error("Doctor not found or role mismatch");
+    }
 
     revalidatePath("/admin");
     return { success: true };
@@ -99,6 +104,9 @@ export async function updateDoctorStatus(formData) {
 }
 
 export async function updateDoctorActiveStatus(formData) {
+  const isAdmin = await verifyAdmin();
+  if (!isAdmin) throw new Error("Unauthorized");
+
   const doctorId = formData.get("doctorId");
   const suspend = formData.get("suspend") === "true";
 
