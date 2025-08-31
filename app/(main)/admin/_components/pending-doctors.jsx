@@ -70,6 +70,15 @@ const PendingDoctors = ({ doctors }) => {
   const handleCloseDialog = () => {
     setSelectedDoctors(null);
   };
+
+  function isSafeUrl(url) {
+    try {
+      const u = new URL(url);
+      return u.protocol === "http:" || u.protocol === "https:";
+    } catch {
+      return false;
+    }
+  }
   return (
     <div>
       <Card className={"bg-muted/20 border-emerald-900/20"}>
@@ -141,12 +150,14 @@ const PendingDoctors = ({ doctors }) => {
       {selectedDoctors && (
         <Dialog
           open={!!selectedDoctors}
-          onOpenChange={handleCloseDialog}>
+          onOpenChange={(open) => {
+            if (!open) handleCloseDialog();
+          }}>
           <DialogTrigger>Open</DialogTrigger>
           <DialogContent className="max-w-3xl">
             <DialogHeader>
               <DialogTitle className={"text-xl font-bold text-white"}>
-                Doctor Verification Deatails
+                Doctor Verification Details
               </DialogTitle>
               <DialogDescription>
                 Review the doctor&apos;s information carefully before
@@ -218,14 +229,20 @@ const PendingDoctors = ({ doctors }) => {
                       Credentials
                     </h4>
                     <div className="flex items-center">
-                      <a
-                        href={selectedDoctors.credentialUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-emerald-400 hover:text-emerald-300 flex items-center">
-                        View Credentials
-                        <ExternalLink className="h-4 w-4 ml-1" />
-                      </a>
+                      {isSafeUrl(selectedDoctors.credentialUrl) ? (
+                        <a
+                          href={selectedDoctors.credentialUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-emerald-400 hover:text-emerald-300 flex items-center">
+                          View Credentials
+                          <ExternalLink className="h-4 w-4 ml-1" />
+                        </a>
+                      ) : (
+                        <span className="text-muted-foreground">
+                          Credentials unavailable
+                        </span>
+                      )}
                     </div>
                   </div>
                 </div>
