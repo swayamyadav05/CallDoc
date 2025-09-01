@@ -67,6 +67,27 @@ export async function getVerifiedDoctors() {
   }
 }
 
+export async function getRejectedDoctors() {
+  const isAdmin = await verifyAdmin();
+  if (!isAdmin) throw new Error("Unauthorized");
+
+  try {
+    const rejectedDoctors = await prisma.user.findMany({
+      where: {
+        role: "DOCTOR",
+        verificationStatus: "REJECTED",
+      },
+      orderBy: {
+        createdAt: "desc",
+      },
+    });
+
+    return { doctors: rejectedDoctors };
+  } catch (error) {
+    throw new Error("Failed to fetch rejected doctors");
+  }
+}
+
 export async function updateDoctorStatus(formData) {
   const isAdmin = await verifyAdmin();
   if (!isAdmin) throw new Error("Unauthorized");

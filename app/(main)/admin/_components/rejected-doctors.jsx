@@ -1,9 +1,5 @@
 "use client";
 
-import { updateDoctorActiveStatus } from "@/actions/admin";
-import useFetch from "@/app/hooks/use-fetch";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
@@ -12,20 +8,20 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { Ban, Loader2, Search, User2 } from "lucide-react";
-import { useRouter } from "next/navigation";
-import React, { useEffect, useState } from "react";
-import { toast } from "sonner";
+import { Badge } from "@/components/ui/badge";
+import { Search, User2 } from "lucide-react";
+import React, { useState } from "react";
 
-const VerifiedDoctors = ({ doctors }) => {
+const RejectedDoctors = ({ doctors }) => {
   const [searchTerm, setSearchTerm] = useState("");
   const [targetDoctor, setTargetDoctor] = useState(null);
 
   // First filter for rejected doctors only
   const rejectedDoctors = doctors.filter(
-    (doctor) => doctor.verificationStatus === "VERIFIED"
+    (doctor) => doctor.verificationStatus === "REJECTED"
   );
 
+  // Then apply search filter
   const filteredDoctors = rejectedDoctors.filter((doctor) => {
     const query = searchTerm.toLowerCase();
     return (
@@ -34,59 +30,24 @@ const VerifiedDoctors = ({ doctors }) => {
       doctor.email.toLowerCase().includes(query)
     );
   });
-
-  const {
-    loading,
-    data,
-    error,
-    fn: submitStatusUpdate,
-  } = useFetch(updateDoctorActiveStatus);
-  const router = useRouter();
-
-  const handleStatusChange = async (doctor) => {
-    const confirmed = window.confirm(
-      `Are you sure you want to suspend ${doctor.name}?`
-    );
-
-    if (!confirmed || loading) return;
-
-    const formData = new FormData();
-    formData.append("doctorId", doctor.id);
-    formData.append("suspend", "true");
-
-    setTargetDoctor(doctor);
-    await submitStatusUpdate(formData);
-  };
-
-  useEffect(() => {
-    if (data?.success && targetDoctor) {
-      toast.success(`Suspended ${targetDoctor.name} successfully!`);
-      setTargetDoctor(null);
-      router.refresh();
-    }
-    if (error && targetDoctor) {
-      setTargetDoctor(null);
-    }
-  }, [data, error, targetDoctor, router]);
-
   return (
     <div>
-      <Card className={"bg-muted/20 border-emerald-900/20"}>
+      <Card className={"bg-muted/20 border-red-900/20"}>
         <CardHeader>
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
             <div>
               <CardTitle className={"text-xl font-bold text-white"}>
-                Manage Doctors
+                Rejected Doctors
               </CardTitle>
               <CardDescription>
-                View and manage all verified doctors
+                View and manage all rejected doctors
               </CardDescription>
             </div>
             <div className="relative w-full md:w-64">
-              <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+              <Search className="absolute left-2.5  top-2.5 h-4 w-4 text-muted-foreground" />
               <Input
                 placeholder="Search doctors..."
-                className={"pl-8 bg-background border-emerald-900/20"}
+                className={"pl-8 bg-background border-red-900/20"}
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
               />
@@ -97,8 +58,8 @@ const VerifiedDoctors = ({ doctors }) => {
           {filteredDoctors.length === 0 ? (
             <div className="text-center py-8 text-muted-foreground">
               {searchTerm
-                ? "No doctors match your search criteria."
-                : "No verified doctors available."}
+                ? "No rejected doctors match your search criteria."
+                : "No rejected doctors available."}
             </div>
           ) : (
             <div className="space-y-4">
@@ -106,13 +67,13 @@ const VerifiedDoctors = ({ doctors }) => {
                 <Card
                   key={doctor.id}
                   className={
-                    "bg-background border-emerald-900/20 hover:border-emerald-700/30 transition-all"
+                    "bg-background border-red-900/20 hover:border-red-700/30 transition-all"
                   }>
                   <CardContent className={"p-4"}>
                     <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
                       <div className="flex items-center gap-3">
                         <div className="bg-muted/20 rounded-full p-2">
-                          <User2 className="h-5 w-5 text-emerald-400" />
+                          <User2 className="h-5 w-5 text-red-400" />
                         </div>
                         <div>
                           <h3 className="font-medium text-white">
@@ -129,25 +90,10 @@ const VerifiedDoctors = ({ doctors }) => {
                         <Badge
                           variant={"outline"}
                           className={
-                            "bg-emerald-900/20 border-emerald-900/30 text-emerald-400"
+                            "bg-red-900/20 border-red-900/30 text-red-400"
                           }>
-                          Active
+                          Rejected
                         </Badge>
-                        <Button
-                          variant={"outline"}
-                          size={"sm"}
-                          onClick={() => handleStatusChange(doctor)}
-                          className={
-                            "border-red-900/30 hover:bg-red-900/10 text-red-400"
-                          }>
-                          {loading &&
-                          targetDoctor?.id === doctor.id ? (
-                            <Loader2 className="h-4 w-4 mr-1 animate-spin" />
-                          ) : (
-                            <Ban className="h-4 w-4 mr-1" />
-                          )}
-                          Suspend
-                        </Button>
                       </div>
                     </div>
                   </CardContent>
@@ -161,4 +107,4 @@ const VerifiedDoctors = ({ doctors }) => {
   );
 };
 
-export default VerifiedDoctors;
+export default RejectedDoctors;
