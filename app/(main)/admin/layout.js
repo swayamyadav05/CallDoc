@@ -1,7 +1,6 @@
 import { verifyAdmin } from "@/actions/admin";
 import PageHeader from "@/components/page-header";
-import { Tabs, TabsTrigger } from "@/components/ui/tabs";
-import { TabsList } from "@radix-ui/react-tabs";
+import { Tabs, TabsTrigger, TabsList } from "@/components/ui/tabs";
 import { AlertCircle, ShieldCheck, User2, X } from "lucide-react";
 import { redirect } from "next/navigation";
 import React from "react";

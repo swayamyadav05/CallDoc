@@ -14,7 +14,6 @@ import React, { useState } from "react";
 
 const RejectedDoctors = ({ doctors }) => {
   const [searchTerm, setSearchTerm] = useState("");
-  const [targetDoctor, setTargetDoctor] = useState(null);
 
   // First filter for rejected doctors only
   const rejectedDoctors = doctors.filter(
@@ -24,10 +23,14 @@ const RejectedDoctors = ({ doctors }) => {
   // Then apply search filter
   const filteredDoctors = rejectedDoctors.filter((doctor) => {
     const query = searchTerm.toLowerCase();
+
+    const name = (doctor.name ?? "").toLowerCase();
+    const specialty = (doctor.specialty ?? "").toLowerCase();
+    const email = (doctor.email ?? "").toLowerCase();
     return (
-      doctor.name.toLowerCase().includes(query) ||
-      doctor.specialty.toLowerCase().includes(query) ||
-      doctor.email.toLowerCase().includes(query)
+      name.includes(query) ||
+      specialty.includes(query) ||
+      email.includes(query)
     );
   });
   return (
