@@ -21,7 +21,12 @@ const VerifiedDoctors = ({ doctors }) => {
   const [searchTerm, setSearchTerm] = useState("");
   const [targetDoctor, setTargetDoctor] = useState(null);
 
-  const filteredDoctors = doctors.filter((doctor) => {
+  // First filter for rejected doctors only
+  const rejectedDoctors = doctors.filter(
+    (doctor) => doctor.verificationStatus === "VERIFIED"
+  );
+
+  const filteredDoctors = rejectedDoctors.filter((doctor) => {
     const query = searchTerm.toLowerCase();
     return (
       doctor.name.toLowerCase().includes(query) ||
