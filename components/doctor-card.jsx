@@ -1,7 +1,8 @@
 import React from "react";
 import { Card, CardContent } from "./ui/card";
-import { Badge, Calendar, Star, User2 } from "lucide-react";
+import { Calendar, Star, User2 } from "lucide-react";
 import { Button } from "./ui/button";
+import { Badge } from "./ui/badge";
 import Link from "next/link";
 
 const DoctorCard = ({ doctor }) => {
@@ -52,7 +53,9 @@ const DoctorCard = ({ doctor }) => {
                 "w-full bg-emerald-500 hover:bg-emerald-600 mt-2"
               }>
               <Link
-                href={`/doctors/${doctor.specialty}/${doctor.id}`}>
+                href={`/doctors/${encodeURIComponent(
+                  doctor.specialty
+                )}/${doctor.id}`}>
                 <Calendar className="h-4 w-4 mr-2" />
                 View Profile & Book
               </Link>

@@ -11,7 +11,7 @@ const SpecialtiesPage = () => {
           Find Your Doctor
         </h1>
         <p className="text-muted-foreground text-lg">
-          Browse by specialty or view all available healthare
+          Browse by specialty or view all available healthcare
           providers
         </p>
       </div>
@@ -19,7 +19,7 @@ const SpecialtiesPage = () => {
         {specialties.map((specialty) => (
           <Link
             key={specialty.name}
-            href={`/doctors/${specialty.name}`}>
+            href={`/doctors/${encodeURIComponent(specialty.name)}`}>
             <Card
               className={
                 "hover:border-emerald-700/40 transition-all cursor-pointer border-emerald-900/20 h-full"

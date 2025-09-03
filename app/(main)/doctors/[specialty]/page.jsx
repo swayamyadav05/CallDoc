@@ -20,9 +20,15 @@ const specialtyPage = async ({ params }) => {
   return (
     <div className="space-y-5">
       <PageHeader
-        title={specialty.split("%20").join(" ")}
+        title={(() => {
+          try {
+            return decodeURIComponent(String(specialty));
+          } catch (error) {
+            return specialty;
+          }
+        })().trim()}
         backLink="/doctors"
-        backLabel="All Specialities"
+        backLabel="All Specialties"
       />
 
       {doctors && doctors.length > 0 ? (
@@ -38,7 +44,7 @@ const specialtyPage = async ({ params }) => {
           </h3>
           <p className="text-muted-foreground">
             There are currently no verified doctors in this specialty.
-            Please check back later or chose another specialty.
+            Please check back later or choose another specialty.
           </p>
         </div>
       )}
